@@ -1,0 +1,9 @@
+{
+  "name": "Better-PhoneController",
+  "description": "A high-end family safety and coordination hub Several good features.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

@@ -16,6 +16,7 @@ const App: React.FC = () => {
   const [isUpgraded, setIsUpgraded] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
   const [showCommandCenter, setShowCommandCenter] = useState(false);
+  const [safetyInitialTab, setSafetyInitialTab] = useState<'ALERTS' | 'SHIELDS' | 'APPS' | 'ANALYSIS'>('ALERTS');
 
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([
     {
@@ -31,6 +32,7 @@ const App: React.FC = () => {
       batteryLevel: 42,
       isCharging: false,
       deviceStatus: 'silent',
+      isLocked: false,
       appUsage: [
         { appName: 'YouTube', minutes: 65, limitMinutes: 60, icon: 'fa-brands fa-youtube', color: 'bg-red-500' },
         { appName: 'TikTok', minutes: 45, limitMinutes: 30, icon: 'fa-brands fa-tiktok', color: 'bg-black' },
@@ -51,6 +53,7 @@ const App: React.FC = () => {
       batteryLevel: 12,
       isCharging: true,
       deviceStatus: 'loud',
+      isLocked: false,
       appUsage: [
         { appName: 'Instagram', minutes: 25, limitMinutes: 60, icon: 'fa-brands fa-instagram', color: 'bg-pink-500' },
         { appName: 'Snapchat', minutes: 15, limitMinutes: 30, icon: 'fa-brands fa-snapchat', color: 'bg-yellow-400' },
@@ -105,6 +108,7 @@ const App: React.FC = () => {
       batteryLevel: 100,
       isCharging: false,
       deviceStatus: 'loud',
+      isLocked: false,
       appUsage: []
     };
     setFamilyMembers(prev => [...prev, newMember]);
@@ -112,6 +116,22 @@ const App: React.FC = () => {
 
   const handleUpdateMember = (updatedMember: FamilyMember) => {
     setFamilyMembers(prev => prev.map(m => m.id === updatedMember.id ? updatedMember : m));
+  };
+
+  const handleToggleLock = (childId: string) => {
+    setFamilyMembers(prev => prev.map(m => {
+      if (m.id === childId) {
+        return { ...m, isLocked: !m.isLocked };
+      }
+      return m;
+    }));
+  };
+
+  const handleGlobalLockToggle = () => {
+    const isAllLocked = familyMembers.every(m => m.isLocked);
+    const newState = !isAllLocked;
+    setFamilyMembers(prev => prev.map(m => ({ ...m, isLocked: newState })));
+    setShowCommandCenter(false);
   };
 
   const handleViewUsage = (childId: string) => {
@@ -146,7 +166,16 @@ const App: React.FC = () => {
           isUpgraded={isUpgraded}
           onUpgrade={() => setCurrentSection(AppSection.CHECKOUT)}
           onViewUsage={handleViewUsage}
+          onToggleLock={handleToggleLock}
           onViewMap={() => setCurrentSection(AppSection.TRACKER)}
+          onViewAlerts={() => {
+            setSafetyInitialTab('ALERTS');
+            setCurrentSection(AppSection.SAFETY);
+          }}
+          onViewAnalysis={() => {
+            setSafetyInitialTab('ANALYSIS');
+            setCurrentSection(AppSection.SAFETY);
+          }}
         />;
 
       case AppSection.USAGE_DETAILS:
@@ -159,10 +188,15 @@ const App: React.FC = () => {
         return <AIChat onBack={() => setCurrentSection(AppSection.DASHBOARD)} />;
 
       case AppSection.TRACKER:
-        return <TrackerView familyMembers={familyMembers} isUpgraded={isUpgraded} onUpgrade={() => setCurrentSection(AppSection.CHECKOUT)} />;
+        return <TrackerView 
+          familyMembers={familyMembers} 
+          isUpgraded={isUpgraded} 
+          onUpgrade={() => setCurrentSection(AppSection.CHECKOUT)}
+          onViewUsage={handleViewUsage}
+        />;
 
       case AppSection.SAFETY:
-        return <SafetyView familyMembers={familyMembers} isUpgraded={isUpgraded} />;
+        return <SafetyView familyMembers={familyMembers} isUpgraded={isUpgraded} initialTab={safetyInitialTab} />;
 
       case AppSection.PROFILE:
         return <ProfileView 
@@ -188,6 +222,7 @@ const App: React.FC = () => {
   };
 
   const showNav = [AppSection.DASHBOARD, AppSection.TRACKER, AppSection.SAFETY, AppSection.AI_CHAT, AppSection.PROFILE, AppSection.USAGE_DETAILS].includes(currentSection);
+  const isAllLocked = familyMembers.every(m => m.isLocked);
 
   return (
     <div className="flex flex-col h-full w-full relative">
@@ -223,13 +258,13 @@ const App: React.FC = () => {
               </button>
 
               <button 
-                onClick={() => setShowCommandCenter(false)}
+                onClick={handleGlobalLockToggle}
                 className="flex flex-col items-center gap-3 group"
               >
-                 <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center shadow-lg group-active:scale-90 transition-transform">
-                    <i className="fa-solid fa-lock text-2xl text-[#3E2723]"></i>
+                 <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-lg group-active:scale-90 transition-transform ${isAllLocked ? 'bg-emerald-500 text-white' : 'bg-white text-[#3E2723]'}`}>
+                    <i className={`fa-solid ${isAllLocked ? 'fa-lock-open' : 'fa-lock'} text-2xl`}></i>
                  </div>
-                 <span className="text-white text-[10px] font-black uppercase tracking-widest">Lock Down</span>
+                 <span className="text-white text-[10px] font-black uppercase tracking-widest">{isAllLocked ? 'Unlock All' : 'Lock Down'}</span>
               </button>
            </div>
         </div>,

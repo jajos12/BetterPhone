@@ -82,8 +82,8 @@ const ProfileView: React.FC<Props> = ({ familyMembers, onAddMember, onUpdateMemb
         </div>
         <div className={`h-px w-full my-6 ${isUpgraded ? 'bg-[#D7CCC8]' : 'bg-white/20'}`}></div>
         <div className="flex items-center gap-4">
-           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isUpgraded ? 'bg-white text-[#3E2723]' : 'bg-white/10 text-[#D7CCC8]'}`}>
-              <i className="fa-solid fa-shield-check" aria-hidden="true"></i>
+           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isUpgraded ? 'bg-white text-[#3E2723]' : 'bg-white/10 text-white'}`}>
+              <i className="fa-solid fa-shield-halved text-lg" aria-hidden="true"></i>
            </div>
            <p className={`text-xs font-medium ${isUpgraded ? 'text-[#8D6E63]' : 'text-[#D7CCC8]'}`}>
              {isUpgraded ? 'All premium family shields active.' : 'Basic safety monitoring enabled.'}
@@ -250,7 +250,7 @@ const ProfileView: React.FC<Props> = ({ familyMembers, onAddMember, onUpdateMemb
 
               {modalStep === 'DONE' && (
                 <div className="text-center animate-fadeIn py-4">
-                  <div className="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                  <div className="w-14 h-14 bg-[#3E2723] text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
                     <i className="fa-solid fa-check text-xl" aria-hidden="true"></i>
                   </div>
                   <h3 id="modal-title" className="text-lg font-extrabold text-[#3E2723] mb-1">Device Linked!</h3>

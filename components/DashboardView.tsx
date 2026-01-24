@@ -36,7 +36,10 @@ interface Props {
   isUpgraded: boolean;
   onUpgrade: () => void;
   onViewUsage: (childId: string) => void;
+  onToggleLock: (childId: string) => void;
   onViewMap: () => void;
+  onViewAlerts: () => void;
+  onViewAnalysis: () => void;
 }
 
 // --- Sub-Components ---
@@ -131,9 +134,12 @@ const RequestCard: React.FC<{ request: RequestItem; onResolve: (approved: boolea
   </div>
 );
 
-const IssuesCounter: React.FC = () => (
+const IssuesCounter: React.FC<{ onAlertsClick?: () => void; onScannedClick?: () => void }> = ({ onAlertsClick, onScannedClick }) => (
   <div className="grid grid-cols-2 gap-4 mb-6">
-    <div className="relative p-5 bg-gradient-to-br from-rose-500 to-rose-600 rounded-[2rem] shadow-lg overflow-hidden group cursor-pointer active:scale-95 transition-transform">
+    <div 
+      onClick={onAlertsClick}
+      className="relative p-5 bg-gradient-to-br from-rose-500 to-rose-600 rounded-[2rem] shadow-lg overflow-hidden group cursor-pointer active:scale-95 transition-transform"
+    >
       <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-10 -mt-10 blur-xl"></div>
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white mb-3 shadow-inner">
@@ -146,7 +152,10 @@ const IssuesCounter: React.FC = () => (
       </div>
     </div>
 
-    <div className="relative p-5 bg-white border border-[#D7CCC8]/40 rounded-[2rem] shadow-sm overflow-hidden group cursor-pointer active:scale-95 transition-transform">
+    <div 
+      onClick={onScannedClick}
+      className="relative p-5 bg-white border border-[#D7CCC8]/40 rounded-[2rem] shadow-sm overflow-hidden group cursor-pointer active:scale-95 transition-transform"
+    >
       <div className="absolute bottom-0 right-0 w-20 h-20 bg-emerald-50 rounded-full -mr-5 -mb-5"></div>
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mb-3">
@@ -163,12 +172,15 @@ const IssuesCounter: React.FC = () => (
 
 // --- Main Component ---
 
-const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onResolveRequest, onSelectAI, isPaused, onTogglePause, isUpgraded, onUpgrade, onViewUsage, onViewMap }) => {
+const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onResolveRequest, onSelectAI, isPaused, onTogglePause, isUpgraded, onUpgrade, onViewUsage, onToggleLock, onViewMap, onViewAlerts, onViewAnalysis }) => {
   const { user } = useUser();
   const { showToast } = useToast();
   const [activeFilter, setActiveFilter] = useState('All');
   const [greeting, setGreeting] = useState('Welcome back');
   const [showStory, setShowStory] = useState<string | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
+  const [isBedtime, setIsBedtime] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
   // Time based greeting
   useEffect(() => {
@@ -220,7 +232,10 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
       </div>
 
       {/* Issues & Stats (Bark Style) */}
-      <IssuesCounter />
+      <IssuesCounter 
+        onAlertsClick={onViewAlerts}
+        onScannedClick={onViewAnalysis}
+      />
 
       {/* Quick Actions Grid */}
       <section>
@@ -234,9 +249,34 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
               showToast(isPaused ? 'Family Devices Resumed' : 'Family Devices Paused', 'neutral');
             }}
           />
-          <QuickAction icon="fa-lock" label="Lock" color="text-rose-500" />
-          <QuickAction icon="fa-moon" label="Bedtime" />
-          <QuickAction icon="fa-graduation-cap" label="Focus" />
+          <QuickAction 
+            icon={isLocked ? "fa-lock-open" : "fa-lock"} 
+            label={isLocked ? "Unlock" : "Lock"}
+            active={isLocked}
+            color={isLocked ? "" : "text-rose-500"}
+            onClick={() => {
+              setIsLocked(!isLocked);
+              showToast(isLocked ? 'Devices Unlocked' : 'All Devices Locked', 'neutral');
+            }}
+          />
+          <QuickAction 
+            icon="fa-moon" 
+            label="Bedtime"
+            active={isBedtime}
+            onClick={() => {
+              setIsBedtime(!isBedtime);
+              showToast(isBedtime ? 'Bedtime Mode Disabled' : 'Bedtime Mode Activated', 'neutral');
+            }}
+          />
+          <QuickAction 
+            icon="fa-graduation-cap" 
+            label="Focus"
+            active={isFocus}
+            onClick={() => {
+              setIsFocus(!isFocus);
+              showToast(isFocus ? 'Focus Mode Disabled' : 'Focus Mode Enabled', 'neutral');
+            }}
+          />
         </div>
       </section>
 
@@ -324,7 +364,8 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
            {familyMembers.map(member => (
               <div 
                 key={member.id} 
-                className="p-6 rounded-3xl bg-white border-2 border-[#D7CCC8]/20 shadow-sm relative overflow-hidden group"
+                onClick={() => onViewUsage(member.id)}
+                className="p-6 rounded-3xl bg-white border-2 border-[#D7CCC8]/20 shadow-sm relative overflow-hidden group cursor-pointer active:scale-[0.99] transition-transform"
               >
                  {/* Header with Vitals */}
                  <div className="flex justify-between items-start mb-4">
@@ -350,8 +391,7 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
                       </div>
                     </div>
                     <button 
-                      onClick={() => onViewUsage(member.id)}
-                      className="w-10 h-10 rounded-xl bg-[#D7CCC8]/10 flex items-center justify-center text-[#3E2723] hover:bg-[#3E2723] hover:text-white transition-all"
+                      className="w-10 h-10 rounded-xl bg-[#D7CCC8]/10 flex items-center justify-center text-[#3E2723] group-hover:bg-[#3E2723] group-hover:text-white transition-all"
                     >
                       <i className="fa-solid fa-chevron-right text-xs"></i>
                     </button>
@@ -375,11 +415,28 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
 
                  {/* Quick Actions for Child */}
                  <div className="flex gap-2">
-                    <button className="flex-1 py-2.5 bg-[#D7CCC8]/10 rounded-xl text-[10px] font-black text-[#3E2723] uppercase tracking-widest hover:bg-[#D7CCC8]/20 transition-colors">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        showToast(`Check-in requested from ${member.name}`, 'success');
+                      }}
+                      className="flex-1 py-2.5 bg-[#D7CCC8]/10 rounded-xl text-[10px] font-black text-[#3E2723] uppercase tracking-widest hover:bg-[#D7CCC8]/20 transition-colors"
+                    >
                       Check In
                     </button>
-                    <button className="flex-1 py-2.5 bg-rose-50 rounded-xl text-[10px] font-black text-rose-600 uppercase tracking-widest hover:bg-rose-100 transition-colors">
-                      Lock Device
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleLock(member.id);
+                        showToast(member.isLocked ? `${member.name}'s device unlocked` : `${member.name}'s device is now locked`, 'success');
+                      }}
+                      className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${
+                        member.isLocked 
+                          ? 'bg-[#3E2723] text-white hover:bg-[#2D1B19]' 
+                          : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
+                      }`}
+                    >
+                      {member.isLocked ? 'Unlock Device' : 'Lock Device'}
                     </button>
                  </div>
               </div>

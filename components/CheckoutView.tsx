@@ -26,12 +26,33 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
 
   if (isDone) {
     return (
-      <div className="h-full bg-transparent flex flex-col items-center justify-center p-8 text-center animate-pulse">
-        <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-xl">
-           <i className="fa-solid fa-circle-check text-4xl" aria-hidden="true"></i>
+      <div className="h-full bg-transparent flex flex-col items-center justify-center p-8 text-center step-enter relative overflow-hidden">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+           <div className="absolute top-1/4 left-10 w-6 h-6 bg-emerald-400/20 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+           <div className="absolute top-1/3 right-12 w-4 h-4 bg-amber-400/20 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+           <div className="absolute bottom-1/3 left-1/3 w-3 h-3 bg-rose-400/20 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+           <div className="absolute top-10 right-1/2 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"></div>
         </div>
-        <h2 className="text-3xl font-extrabold text-[#3E2723] mb-2">BetterPhone Activated</h2>
-        <p className="text-[#8D6E63] font-medium">Welcome to the Pro family, {user.name.split(' ')[0]}.</p>
+
+        <div className="relative mb-8">
+           <div className="w-32 h-32 bg-gradient-to-tr from-emerald-500 to-emerald-400 rounded-[2.5rem] flex items-center justify-center text-white shadow-2xl shadow-emerald-200 animate-scaleIn relative z-10">
+              <i className="fa-solid fa-check text-5xl drop-shadow-md"></i>
+           </div>
+           <div className="absolute -inset-4 bg-emerald-500/20 rounded-[3rem] blur-xl animate-pulse"></div>
+        </div>
+        
+        <h2 className="text-3xl font-black text-[#3E2723] mb-3 animate-slideIn tracking-tight">You're a Pro!</h2>
+        <p className="text-[#8D6E63] font-medium max-w-[240px] leading-relaxed animate-slideIn mb-8" style={{ animationDelay: '100ms' }}>
+          BetterPhone Pro features have been unlocked for your family.
+        </p>
+
+        <div className="animate-slideIn" style={{ animationDelay: '200ms' }}>
+           <div className="h-1.5 w-32 bg-[#D7CCC8]/30 rounded-full overflow-hidden mx-auto">
+              <div className="h-full bg-[#3E2723] rounded-full animate-fillBar" style={{ animationDuration: '2s' }}></div>
+           </div>
+           <p className="text-[9px] font-black text-[#8D6E63] uppercase tracking-widest mt-3">Redirecting...</p>
+        </div>
       </div>
     );
   }

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { FamilyMember, AlertItem, MonitoredApp } from '../types';
 
+import ContentAnalysis from './ContentAnalysis';
+
 interface Props {
   familyMembers: FamilyMember[];
   isUpgraded: boolean;
+  initialTab?: 'ALERTS' | 'SHIELDS' | 'APPS' | 'ANALYSIS';
 }
 
 // --- Sub-Components ---
@@ -212,8 +215,8 @@ const AppConnectionCard: React.FC<{ app: MonitoredApp }> = ({ app }) => (
 
 // --- Main Component ---
 
-const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded }) => {
-  const [activeTab, setActiveTab] = useState<'ALERTS' | 'SHIELDS' | 'APPS'>('ALERTS');
+const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = 'ALERTS' }) => {
+  const [activeTab, setActiveTab] = useState<'ALERTS' | 'SHIELDS' | 'APPS' | 'ANALYSIS'>(initialTab);
   const [selectedAlert, setSelectedAlert] = useState<AlertItem | null>(null);
 
   const [contentFilters, setContentFilters] = useState([
@@ -330,6 +333,14 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded }) => {
         >
           Apps
         </button>
+        <button 
+          onClick={() => setActiveTab('ANALYSIS')}
+          aria-label="View content analysis"
+          aria-pressed={activeTab === 'ANALYSIS'}
+          className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === 'ANALYSIS' ? 'bg-white text-[#3E2723] shadow-sm' : 'text-[#8D6E63]'}`}
+        >
+          Insights
+        </button>
       </div>
 
       {activeTab === 'ALERTS' && (
@@ -438,6 +449,12 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded }) => {
           <button className="w-full py-4 border-2 border-dashed border-[#D7CCC8] rounded-3xl text-[#8D6E63] font-bold text-xs uppercase tracking-widest hover:bg-[#D7CCC8]/10 transition-colors flex items-center justify-center gap-2">
             <i className="fa-solid fa-plus"></i> Add New Platform
           </button>
+        </div>
+      )}
+
+      {activeTab === 'ANALYSIS' && (
+        <div className="animate-fadeIn">
+          <ContentAnalysis />
         </div>
       )}
 

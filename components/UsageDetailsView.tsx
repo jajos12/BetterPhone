@@ -34,6 +34,34 @@ const WeeklyChart: React.FC = () => {
   );
 };
 
+const HourlyChart: React.FC = () => {
+  // Mock hourly data (24 hours)
+  const hourlyData = [
+    5, 5, 0, 0, 0, 0, 10, 30, 45, 20, 15, 40, 
+    55, 60, 40, 80, 90, 75, 60, 45, 30, 15, 10, 5
+  ];
+  
+  return (
+    <div className="flex items-end justify-between h-32 px-1 gap-[2px]">
+      {hourlyData.map((h, i) => (
+        <div key={i} className="flex flex-col items-center flex-1 h-full justify-end group cursor-pointer relative">
+          <div 
+            className={`w-full rounded-t-sm transition-all duration-500 ease-out hover:bg-[#3E2723] ${h > 50 ? 'bg-[#8D6E63]' : 'bg-[#D7CCC8]/40'}`}
+            style={{ height: `${h}%` }}
+          ></div>
+          {/* Tooltip */}
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#3E2723] text-white text-[9px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+            {i}:00 - {h}m
+          </div>
+          {i % 6 === 0 && (
+            <span className="text-[7px] font-bold text-[#D7CCC8] absolute -bottom-4">{i}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const TopAppsPodium: React.FC<{ apps: any[] }> = ({ apps }) => {
   // Sort apps by usage
   const sorted = [...apps].sort((a, b) => b.minutes - a.minutes).slice(0, 3);
@@ -105,6 +133,7 @@ const CategoryDonut: React.FC = () => (
 const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showScheduleEditor, setShowScheduleEditor] = useState(false);
+  const [viewMode, setViewMode] = useState<'DAILY' | 'WEEKLY'>('DAILY');
 
   useEffect(() => {
     // Trigger animation after mount
@@ -158,17 +187,32 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            <i className="fa-solid fa-chart-line absolute right-[-20px] bottom-[-20px] text-[120px] text-white/5" aria-hidden="true"></i>
         </div>
 
-        {/* Weekly Trends */}
+        {/* Activity Chart Section */}
         <section className="space-y-4">
            <div className="flex items-center justify-between px-2">
-              <h3 className="font-extrabold text-[#3E2723] text-xl tracking-tight">Weekly Activity</h3>
-              <div className="flex items-center gap-2">
-                 <span className="w-2 h-2 rounded-full bg-[#3E2723]"></span>
-                 <span className="text-[9px] font-bold text-[#8D6E63] uppercase">This Week</span>
+              <h3 className="font-extrabold text-[#3E2723] text-xl tracking-tight">Activity</h3>
+              
+              {/* Day/Week Toggle */}
+              <div className="bg-[#D7CCC8]/30 p-1 rounded-xl flex relative">
+                 <button 
+                   onClick={() => setViewMode('DAILY')}
+                   className={`relative z-10 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest transition-colors ${viewMode === 'DAILY' ? 'text-[#3E2723]' : 'text-[#8D6E63]'}`}
+                 >
+                   Daily
+                 </button>
+                 <button 
+                   onClick={() => setViewMode('WEEKLY')}
+                   className={`relative z-10 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest transition-colors ${viewMode === 'WEEKLY' ? 'text-[#3E2723]' : 'text-[#8D6E63]'}`}
+                 >
+                   Weekly
+                 </button>
+                 <div 
+                   className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-lg shadow-sm transition-all duration-300 ease-out ${viewMode === 'DAILY' ? 'left-1' : 'left-[calc(50%+2px)]'}`}
+                 ></div>
               </div>
            </div>
-           <div className="p-6 bg-white border border-[#D7CCC8]/40 rounded-3xl shadow-sm">
-              <WeeklyChart />
+           <div className="p-6 bg-white border border-[#D7CCC8]/40 rounded-3xl shadow-sm min-h-[180px] flex flex-col justify-end">
+              {viewMode === 'DAILY' ? <HourlyChart /> : <WeeklyChart />}
            </div>
         </section>
 

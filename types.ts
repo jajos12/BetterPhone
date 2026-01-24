@@ -22,6 +22,7 @@ export interface FamilyMember {
   batteryLevel?: number;
   isCharging?: boolean;
   deviceStatus?: 'silent' | 'vibrate' | 'loud';
+  isLocked?: boolean;
   downtime?: {
     start: string; // "21:00"
     end: string; // "07:00"

@@ -17,6 +17,7 @@ interface Props {
   familyMembers: FamilyMember[];
   isUpgraded: boolean;
   onUpgrade?: () => void;
+  onViewUsage: (childId: string) => void;
 }
 
 const createAvatarIcon = (avatarUrl: string, batteryLevel?: number, speed?: number) => {
@@ -27,7 +28,7 @@ const createAvatarIcon = (avatarUrl: string, batteryLevel?: number, speed?: numb
                <img src="${avatarUrl}" class="w-full h-full object-cover" />
              </div>
              ${batteryLevel ? `
-               <div class="absolute -top-1 -right-1 z-20 bg-white rounded-full px-1.5 py-0.5 shadow-md border border-[#D7CCC8]/50 flex items-center gap-0.5">
+               <div class="absolute -top-1 -right-1 z-20 bg-white rounded-full px-1.5 py-0.5 shadow-md border border-[#D7CCC8]/50 flex items-center gap-0.5 ${batteryLevel < 20 ? 'animate-pulse ring-2 ring-rose-200' : ''}">
                  <i class="fa-solid fa-battery-half text-[8px] ${batteryLevel < 20 ? 'text-rose-500' : 'text-emerald-500'}"></i>
                  <span class="text-[8px] font-bold text-[#3E2723]">${batteryLevel}%</span>
                </div>
@@ -58,9 +59,9 @@ const LocationPicker = ({ onMove }: { onMove: (latlng: L.LatLng) => void }) => {
   return null;
 };
 
-const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) => {
+const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, onViewUsage }) => {
   const [activeTab, setActiveTab] = useState<'MAP' | 'ZONES' | 'HISTORY'>('MAP');
-  const [isSheetMinimized, setIsSheetMinimized] = useState(false);
+  const [isSheetMinimized, setIsSheetMinimized] = useState(true);
   const [selectedHistoryMemberId, setSelectedHistoryMemberId] = useState<string>(familyMembers[0]?.id || '');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [historyTime, setHistoryTime] = useState(50); // 0-100 slider value
@@ -235,6 +236,12 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) 
                           <p className="text-[9px] text-emerald-500 font-bold mt-1">
                             <i className="fa-solid fa-battery-half mr-1"></i> {member.batteryLevel}%
                           </p>
+                          <button 
+                            onClick={() => onViewUsage(member.id)}
+                            className="mt-2 w-full py-1.5 bg-[#3E2723] text-white rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm active:scale-95 transition-transform"
+                          >
+                            View Details
+                          </button>
                         </div>
                       </Popup>
                     </Marker>
@@ -256,33 +263,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) 
               </button>
             </div>
 
-            {/* Simulated Pins */}
-            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-               <div className="w-12 h-12 bg-[#3E2723] rounded-full flex items-center justify-center text-white ring-8 ring-[#3E2723]/10 shadow-2xl relative">
-                  <i className="fa-solid fa-house-chimney text-[10px]"></i>
-               </div>
-
-               {familyMembers.map((member, i) => (
-                 <div key={member.id} className="absolute transition-all duration-1000 pointer-events-auto" 
-                    style={{ transform: `translate(${i % 2 === 0 ? '120px' : '-110px'}, ${i % 2 === 0 ? '-160px' : '90px'})` }}>
-                    <div className="relative group cursor-pointer">
-                        {member.isOutsideSafeZone && (
-                          <div className="absolute -inset-6 bg-rose-500/15 rounded-full animate-ping"></div>
-                        )}
-                        <div className={`relative p-2 bg-white rounded-[2rem] shadow-2xl border-2 transition-all group-hover:scale-110 ${member.isOutsideSafeZone ? 'border-rose-500' : 'border-[#3E2723]'}`}>
-                           <img src={member.avatar} className="w-14 h-14 rounded-[1.5rem] bg-[#FDFBFA]" />
-                           <div className={`absolute -top-1 -right-1 px-2.5 py-1 rounded-full text-[6px] font-black uppercase tracking-widest text-white shadow-md ${member.isOutsideSafeZone ? 'bg-rose-500' : 'bg-[#3E2723]'}`}>
-                             {member.isOutsideSafeZone ? 'Alert' : 'Live'}
-                           </div>
-                        </div>
-                        <div className="absolute top-18 left-1/2 -translate-x-1/2 mt-3 px-4 py-1.5 bg-[#3E2723] text-white rounded-full text-[10px] font-black tracking-widest whitespace-nowrap shadow-xl">
-                           {member.name}
-                        </div>
-                    </div>
-                 </div>
-               ))}
-            </div>
-
             {/* Collapsible Info Sheet */}
             <div className={`absolute left-8 right-8 z-40 transition-all duration-700 ease-in-out ${isSheetMinimized ? 'bottom-[-400px] opacity-0 pointer-events-none' : 'bottom-8 opacity-100'}`}>
                <div className="bg-white/95 backdrop-blur-xl rounded-[3rem] shadow-[0_48px_80px_-24px_rgba(62,39,35,0.3)] border border-[#D7CCC8]/50 p-6 pt-4">
@@ -295,7 +275,10 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) 
                             <img src={member.avatar} className="w-11 h-11 rounded-2xl bg-white border border-[#D7CCC8]/30 shadow-sm" />
                             <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-4 border-white ${member.status === 'active' ? 'bg-emerald-500' : 'bg-[#D7CCC8]'}`}></div>
                          </div>
-                         <div className="flex-1 min-w-0">
+                         <div 
+                            className="flex-1 min-w-0 cursor-pointer"
+                            onClick={() => onViewUsage(member.id)}
+                         >
                             <p className="text-xs font-extrabold text-[#3E2723] mb-0.5">{member.name}</p>
                             <p className="text-[9px] text-[#8D6E63] font-bold truncate opacity-70">{member.location?.address}</p>
                          </div>
@@ -379,6 +362,28 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) 
                         center={[newZone.lat, newZone.lng]}
                         radius={newZone.radius}
                         pathOptions={{ color: '#3E2723', fillColor: '#3E2723', fillOpacity: 0.2, weight: 2, dashArray: '5, 5' }}
+                      />
+                      {/* Interactive Radius Handle */}
+                      <Marker 
+                        position={[
+                          newZone.lat, 
+                          newZone.lng + (newZone.radius / 111320) // Approx conversion from meters to degrees
+                        ]}
+                        draggable={true}
+                        eventHandlers={{
+                          drag: (e) => {
+                            const markerLatLng = e.target.getLatLng();
+                            const centerLatLng = L.latLng(newZone.lat, newZone.lng);
+                            const distance = centerLatLng.distanceTo(markerLatLng);
+                            setNewZone(prev => ({ ...prev, radius: Math.round(distance) }));
+                          }
+                        }}
+                        icon={L.divIcon({
+                          className: 'custom-handle-icon',
+                          html: `<div class="w-6 h-6 bg-white rounded-full border-2 border-[#3E2723] shadow-lg flex items-center justify-center cursor-ew-resize"><i class="fa-solid fa-arrows-left-right text-[10px] text-[#3E2723]"></i></div>`,
+                          iconSize: [24, 24],
+                          iconAnchor: [12, 12]
+                        })}
                       />
                     </MapContainer>
                     
@@ -548,6 +553,10 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade }) 
                    {(historyData[selectedHistoryMemberId] || []).map((day, dayIdx) => (
                      <div key={dayIdx} className="space-y-8 relative pl-8">
                        <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-[0.25em] bg-[#FDFBFA]/80 backdrop-blur-sm relative z-10 w-fit pr-4 rounded-r-lg">{day.day}</p>
+                       
+                       {/* Location History Snake (Visual Connector) */}
+                       <div className="absolute left-[5px] top-8 bottom-0 w-0.5 border-l-2 border-dashed border-[#D7CCC8]/50 z-0"></div>
+
                        {day.events.map((ev, idx) => (
                          <div key={idx} className="relative group">
                             <div className={`absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full z-10 ring-4 ring-[#FDFBFA] ${

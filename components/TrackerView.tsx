@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents } from 're
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix Leaflet default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -86,7 +85,7 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
     setNewZone({ name: '', address: '', radius: 200, icon: 'fa-location-dot', lat: 34.0522, lng: -118.2437 });
   };
 
-  const center: [number, number] = [34.0522, -118.2437]; // Default center (Los Angeles)
+  const center: [number, number] = [34.0522, -118.2437];
 
   const selectedMember = familyMembers.find(m => m.id === selectedHistoryMemberId);
 
@@ -109,9 +108,8 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
     }
   };
 
-  return (
+    return (
     <div className="h-full flex flex-col bg-transparent step-enter pt-20 relative overflow-hidden">
-      {/* Upgrade Modal */}
       {showUpgradeModal && (
         <div 
           className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#3E2723]/60 backdrop-blur-md step-enter"
@@ -155,7 +153,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
         </div>
       )}
 
-      {/* Precision Header */}
       <header className="px-8 pb-6 flex items-center justify-between shrink-0 bg-white/80 backdrop-blur-md z-30">
         <div>
           <h1 className="text-3xl font-extrabold text-[#3E2723] tracking-tight">Family Map</h1>
@@ -166,7 +163,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
         </div>
       </header>
 
-      {/* Mode Switcher */}
       <div className="px-8 mb-6 shrink-0 z-30">
         <div className="flex bg-[#D7CCC8]/30 p-1.5 rounded-2xl" role="tablist">
           <button 
@@ -210,8 +206,7 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                 <TileLayer
                   url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                 />
-                
-                {/* Safe Zones */}
+
                 {safeZones.map((zone, idx) => (
                   <Circle 
                     key={idx}
@@ -221,7 +216,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                   />
                 ))}
 
-                {/* Family Members */}
                 {familyMembers.map((member) => (
                   member.location && (
                     <Marker 
@@ -249,8 +243,7 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                 ))}
               </MapContainer>
             </div>
-            
-            {/* Control Panel */}
+
             <div className="absolute top-6 right-6 z-40 flex flex-col gap-3">
               <button 
                 onClick={() => setIsSheetMinimized(!isSheetMinimized)}
@@ -263,7 +256,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
               </button>
             </div>
 
-            {/* Collapsible Info Sheet */}
             <div className={`absolute left-8 right-8 z-40 transition-all duration-700 ease-in-out ${isSheetMinimized ? 'bottom-[-400px] opacity-0 pointer-events-none' : 'bottom-8 opacity-100'}`}>
                <div className="bg-white/95 backdrop-blur-xl rounded-[3rem] shadow-[0_48px_80px_-24px_rgba(62,39,35,0.3)] border border-[#D7CCC8]/50 p-6 pt-4">
                  <div className="w-12 h-1.5 bg-[#D7CCC8]/40 rounded-full mx-auto mb-6 cursor-pointer hover:bg-[#D7CCC8]" onClick={() => setIsSheetMinimized(true)}></div>
@@ -291,7 +283,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                </div>
             </div>
 
-            {/* Quick Toggle Overlay */}
             {isSheetMinimized && (
               <button 
                 onClick={() => setIsSheetMinimized(false)}
@@ -338,7 +329,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
           </div>
         )}
 
-        {/* Add Zone Modal */}
         {showAddZoneModal && createPortal(
           <div 
             className="absolute inset-0 z-[100] flex items-center justify-center bg-[#3E2723]/60 backdrop-blur-md step-enter"
@@ -363,7 +353,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                         radius={newZone.radius}
                         pathOptions={{ color: '#3E2723', fillColor: '#3E2723', fillOpacity: 0.2, weight: 2, dashArray: '5, 5' }}
                       />
-                      {/* Interactive Radius Handle */}
                       <Marker 
                         position={[
                           newZone.lat, 
@@ -386,13 +375,11 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                         })}
                       />
                     </MapContainer>
-                    
-                    {/* Crosshair */}
+
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[400]">
                        <div className="w-4 h-4 bg-[#3E2723] rounded-full border-2 border-white shadow-lg"></div>
                     </div>
 
-                    {/* Top Bar */}
                     <div className="absolute top-0 left-0 right-0 p-6 pt-14 flex justify-between items-start z-[400]">
                        <button 
                          onClick={() => setIsPickingLocation(false)}
@@ -406,7 +393,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                     </div>
                  </div>
 
-                 {/* Bottom Sheet Controls */}
                  <div className="bg-white rounded-t-[2rem] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] p-6 pb-8 space-y-4 z-[500] relative -mt-6">
                     <div className="w-12 h-1.5 bg-[#D7CCC8]/40 rounded-full mx-auto"></div>
                     
@@ -451,7 +437,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                     onClick={() => setIsPickingLocation(true)}
                     className="h-32 bg-[#F2F1F6] rounded-2xl border-2 border-dashed border-[#D7CCC8] flex flex-col items-center justify-center cursor-pointer hover:border-[#3E2723] hover:bg-[#D7CCC8]/10 transition-all group relative overflow-hidden"
                   >
-                    {/* Mini Map Preview */}
                     <div className="absolute inset-0 opacity-50 grayscale group-hover:grayscale-0 transition-all">
                        <MapContainer 
                          center={[newZone.lat, newZone.lng]} 
@@ -525,7 +510,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
 
         {activeTab === 'HISTORY' && (
           <div className="flex flex-col h-full bg-transparent step-enter overflow-hidden">
-             {/* Child Switcher for Logs */}
              <div className="px-8 pt-6 pb-6 border-b border-[#D7CCC8]/30 bg-white/50 backdrop-blur-md overflow-x-auto no-scrollbar flex items-center gap-6">
                 {familyMembers.map(member => (
                    <button 
@@ -553,8 +537,7 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                    {(historyData[selectedHistoryMemberId] || []).map((day, dayIdx) => (
                      <div key={dayIdx} className="space-y-8 relative pl-8">
                        <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-[0.25em] bg-[#FDFBFA]/80 backdrop-blur-sm relative z-10 w-fit pr-4 rounded-r-lg">{day.day}</p>
-                       
-                       {/* Location History Snake (Visual Connector) */}
+
                        <div className="absolute left-[5px] top-8 bottom-0 w-0.5 border-l-2 border-dashed border-[#D7CCC8]/50 z-0"></div>
 
                        {day.events.map((ev, idx) => (
@@ -581,7 +564,6 @@ const TrackerView: React.FC<Props> = ({ familyMembers, isUpgraded, onUpgrade, on
                    ))}
                 </div>
 
-                {/* Interactive Time Slider */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-xl border-t border-[#D7CCC8]/30 z-20">
                    <div className="flex justify-between mb-2">
                       <span className="text-[10px] font-black text-[#3E2723] uppercase tracking-widest">Replay Path</span>

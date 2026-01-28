@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FamilyMember, RequestItem } from '../types';
 import { useUser } from '../contexts/UserContext';
 import { useToast } from '../contexts/ToastContext';
-import Skeleton from './Skeleton';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix Leaflet default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -41,8 +39,6 @@ interface Props {
   onViewAlerts: () => void;
   onViewAnalysis: () => void;
 }
-
-// --- Sub-Components ---
 
 const StoryBubble: React.FC<{ label: string; icon: string; color: string; onClick: () => void }> = ({ label, icon, color, onClick }) => (
   <button 
@@ -170,8 +166,6 @@ const IssuesCounter: React.FC<{ onAlertsClick?: () => void; onScannedClick?: () 
   </div>
 );
 
-// --- Main Component ---
-
 const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onResolveRequest, onSelectAI, isPaused, onTogglePause, isUpgraded, onUpgrade, onViewUsage, onToggleLock, onViewMap, onViewAlerts, onViewAnalysis }) => {
   const { user } = useUser();
   const { showToast } = useToast();
@@ -182,7 +176,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
   const [isBedtime, setIsBedtime] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
 
-  // Time based greeting
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Good morning');
@@ -190,7 +183,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
     else setGreeting('Good evening');
   }, []);
   
-  // Pattern Log - Purely BetterPhone branded feed
   const activityLog = [
     { id: 1, name: 'Oliver', action: 'entering', target: 'Lincoln Middle Protocol', time: 'Just Now', icon: 'fa-solid fa-location-dot', color: 'text-emerald-500', category: 'Location' },
     { id: 2, name: 'Maya', action: 'reached', target: 'Instagram Usage Limit', time: '12m ago', icon: 'fa-brands fa-instagram', color: 'text-[#E1306C]', category: 'Usage' },
@@ -202,7 +194,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
 
   return (
     <div className="p-8 pb-32 space-y-8 step-enter pt-20 bg-transparent">
-      {/* Glassmorphism Header */}
       <header className="flex items-center justify-between sticky top-0 z-30 py-4 -mx-8 px-8 bg-[#FDFBFA]/80 backdrop-blur-xl border-b border-[#D7CCC8]/20 transition-all">
         <div>
           <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-[0.2em] mb-0.5">{greeting}, {user.name.split(' ')[0]}</p>
@@ -223,7 +214,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
         </div>
       </header>
 
-      {/* Stories Row */}
       <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4">
          <StoryBubble label="Weekly Recap" icon="fa-chart-pie" color="bg-indigo-500" onClick={() => setShowStory('RECAP')} />
          <StoryBubble label="Safety Score" icon="fa-shield-heart" color="bg-emerald-500" onClick={() => setShowStory('SAFETY')} />
@@ -231,13 +221,11 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
          <StoryBubble label="Tips" icon="fa-lightbulb" color="bg-rose-500" onClick={() => setShowStory('TIPS')} />
       </div>
 
-      {/* Issues & Stats (Bark Style) */}
       <IssuesCounter 
         onAlertsClick={onViewAlerts}
         onScannedClick={onViewAnalysis}
       />
 
-      {/* Quick Actions Grid */}
       <section>
         <div className="grid grid-cols-4 gap-3 px-1">
           <QuickAction 
@@ -280,7 +268,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
         </div>
       </section>
 
-      {/* Live Map Widget */}
       <section aria-label="Live Map Preview">
         <div className="flex items-center justify-between mb-3 px-1">
            <h3 className="font-extrabold text-[#3E2723] text-lg tracking-tight">Live Location</h3>
@@ -335,7 +322,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
         </div>
       </section>
 
-      {/* Pending Requests (Family Link Style) */}
       {pendingRequests.length > 0 && (
         <section aria-label="Pending Requests">
           <div className="flex items-center justify-between mb-3 px-1">
@@ -357,7 +343,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
         </section>
       )}
 
-      {/* Usage Patterns Card (Enhanced with Vitals) */}
       <section className="space-y-4" aria-labelledby="patterns-heading">
         <h3 id="patterns-heading" className="font-extrabold text-[#3E2723] text-lg px-1 tracking-tight">Family Devices</h3>
         <div className="grid grid-cols-1 gap-4">
@@ -397,7 +382,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
                     </button>
                  </div>
 
-                 {/* Screen Time Bar */}
                  <div className="space-y-2 mb-4">
                     <div className="flex justify-between items-end">
                        <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest">Daily Limit</p>
@@ -413,7 +397,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
                     </div>
                  </div>
 
-                 {/* Quick Actions for Child */}
                  <div className="flex gap-2">
                     <button 
                       onClick={(e) => {
@@ -444,12 +427,9 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
         </div>
       </section>
 
-      {/* Live Pattern Log Feed */}
       <section className="space-y-4" aria-labelledby="feed-heading">
          <div className="flex items-center justify-between px-1">
             <h3 id="feed-heading" className="font-extrabold text-[#3E2723] text-lg tracking-tight">Activity Feed</h3>
-            
-            {/* Filters */}
             <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
                 {['All', 'Location', 'Usage', 'System'].map(f => (
                   <button 
@@ -480,13 +460,12 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
             ))}
          </div>
       </section>
-      {/* Story Overlay */}
+
       {showStory && (
         <div 
           className="fixed inset-0 z-[100] bg-black text-white flex flex-col animate-fadeIn"
           onClick={() => setShowStory(null)}
         >
-           {/* Progress Bar */}
            <div className="flex gap-1 p-2 pt-4">
               <div className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
                  <div className="h-full bg-white animate-fillBar" style={{ animationDuration: '5s' }}></div>
@@ -526,7 +505,6 @@ const DashboardView: React.FC<Props> = ({ familyMembers, pendingRequests, onReso
                 </>
               )}
 
-              {/* Fallback for others */}
               {['FEATURES', 'TIPS'].includes(showStory) && (
                 <>
                    <div className="w-24 h-24 bg-[#3E2723] border-2 border-white/20 rounded-3xl flex items-center justify-center mb-8 shadow-2xl animate-scaleIn">

@@ -3,7 +3,6 @@ import { getFamilyAdvice } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import { useUser } from '../contexts/UserContext';
 import { useToast } from '../contexts/ToastContext';
-import Skeleton from './Skeleton';
 
 interface Props {
   onBack: () => void;
@@ -71,17 +70,9 @@ const AIChat: React.FC<Props> = ({ onBack }) => {
   const handleRetry = () => {
     const lastUserMsg = messages[messages.length - 1];
     if (lastUserMsg && !lastUserMsg.isAI) {
-      // Remove the last message (which failed) and try sending it again
-      // Actually, better UX is to keep the message and just retry the fetch
-      // But for simplicity, we'll just re-trigger the logic with the last text
-      // and remove the error state.
-      // Ideally we'd have a 'status' on the message itself (sending, failed, sent).
-      
-      // Let's just clear error and set typing to true to simulate retry
       setError(null);
       setIsTyping(true);
       
-      // Re-run the API call
       getFamilyAdvice(lastUserMsg.text).then(aiResponse => {
         setMessages(prev => [...prev, {
           id: (Date.now() + 1).toString(),
@@ -101,7 +92,6 @@ const AIChat: React.FC<Props> = ({ onBack }) => {
 
   return (
     <div className="flex flex-col h-full bg-transparent step-enter pt-16">
-      {/* Integrated Header */}
       <div className="px-8 pt-8 pb-8 border-b border-[#D7CCC8]/30 flex items-center gap-6 sticky top-0 bg-[#FDFBFA]/80 backdrop-blur-md z-20">
         <button 
           onClick={onBack} 
@@ -126,7 +116,6 @@ const AIChat: React.FC<Props> = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Messages Feed */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6 pb-48" role="log" aria-label="Chat messages">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.isAI ? 'justify-start' : 'justify-end'}`}>
@@ -168,9 +157,7 @@ const AIChat: React.FC<Props> = ({ onBack }) => {
         )}
       </div>
 
-      {/* Input Module */}
       <div className="absolute bottom-0 left-0 right-0 p-6 pb-24 bg-[#FDFBFA]/90 backdrop-blur-md z-30 border-t border-[#D7CCC8]/20">
-        {/* Suggested Prompts */}
         <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-1">
           {['Is Oliver safe?', 'Analyze recent texts', 'Explain this app', 'Safety tips'].map(prompt => (
             <button

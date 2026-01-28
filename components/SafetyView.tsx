@@ -9,8 +9,6 @@ interface Props {
   initialTab?: 'ALERTS' | 'SHIELDS' | 'APPS' | 'ANALYSIS';
 }
 
-// --- Sub-Components ---
-
 const SeverityBadge: React.FC<{ severity: AlertItem['severity'] }> = ({ severity }) => {
   const styles = {
     LOW: 'bg-emerald-100 text-emerald-700 border-emerald-200',
@@ -213,8 +211,6 @@ const AppConnectionCard: React.FC<{ app: MonitoredApp }> = ({ app }) => (
   </div>
 );
 
-// --- Main Component ---
-
 const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = 'ALERTS' }) => {
   const [activeTab, setActiveTab] = useState<'ALERTS' | 'SHIELDS' | 'APPS' | 'ANALYSIS'>(initialTab);
   const [selectedAlert, setSelectedAlert] = useState<AlertItem | null>(null);
@@ -237,7 +233,6 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = '
     }));
   };
 
-  // Mock Data - Bark Style
   const alerts: AlertItem[] = [
     { 
       id: '1', 
@@ -307,7 +302,6 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = '
         <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest mt-1">AI Guardian Active</p>
       </header>
 
-      {/* Tab Switcher */}
       <div className="flex bg-[#D7CCC8]/30 p-1.5 rounded-2xl shadow-inner mb-2">
         <button 
           onClick={() => setActiveTab('ALERTS')}
@@ -379,8 +373,7 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = '
                  </div>
               </div>
               <p className="text-xs text-[#D7CCC8] font-medium leading-relaxed relative z-10">Real-time content filtering is active across all 4 family devices.</p>
-              
-              {/* Radar Animation */}
+
               <div className="absolute -right-10 -bottom-10 w-48 h-48">
                  <div className="absolute inset-0 border-2 border-white/10 rounded-full"></div>
                  <div className="absolute inset-8 border-2 border-white/10 rounded-full"></div>
@@ -388,7 +381,6 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = '
                     <i className="fa-solid fa-shield-halved text-2xl text-white/20"></i>
                  </div>
                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-emerald-500/20 to-transparent animate-spin-slow" style={{ clipPath: 'polygon(50% 50%, 100% 0, 100% 50%)' }}></div>
-                 {/* Blips */}
                  <div className="absolute top-10 right-14 w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_10px_#34D399] animate-pulse"></div>
                  <div className="absolute bottom-12 left-16 w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_8px_#34D399] animate-pulse delay-700"></div>
               </div>
@@ -458,7 +450,6 @@ const SafetyView: React.FC<Props> = ({ familyMembers, isUpgraded, initialTab = '
         </div>
       )}
 
-      {/* Conversation Context Modal */}
       {selectedAlert && (
         <ConversationModal 
           alert={selectedAlert} 

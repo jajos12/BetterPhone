@@ -8,7 +8,6 @@ interface Props {
   onBack: () => void;
 }
 
-// --- Sub-Components ---
 const WeeklyChart: React.FC = () => {
   const data = [45, 70, 30, 85, 60, 90, 50]; // Mock data percentages
   const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -22,7 +21,6 @@ const WeeklyChart: React.FC = () => {
               className={`w-full rounded-t-lg transition-all duration-500 ease-out group-hover:opacity-80 ${i === 5 ? 'bg-[#3E2723]' : 'bg-[#D7CCC8]/40'}`}
               style={{ height: `${h}%` }}
             ></div>
-            {/* Tooltip */}
             <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#3E2723] text-white text-[9px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
               {Math.floor(h * 2.4)}m
             </div>
@@ -49,7 +47,6 @@ const HourlyChart: React.FC = () => {
             className={`w-full rounded-t-sm transition-all duration-500 ease-out hover:bg-[#3E2723] ${h > 50 ? 'bg-[#8D6E63]' : 'bg-[#D7CCC8]/40'}`}
             style={{ height: `${h}%` }}
           ></div>
-          {/* Tooltip */}
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#3E2723] text-white text-[9px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
             {i}:00 - {h}m
           </div>
@@ -68,7 +65,6 @@ const TopAppsPodium: React.FC<{ apps: any[] }> = ({ apps }) => {
   
   return (
     <div className="flex items-end justify-center gap-4 h-40 pt-6">
-      {/* 2nd Place */}
       {sorted[1] && (
         <div className="flex flex-col items-center gap-2 animate-slideInLeft" style={{ animationDelay: '100ms' }}>
           <div className="w-12 h-12 rounded-2xl bg-white shadow-md p-2 relative">
@@ -83,7 +79,6 @@ const TopAppsPodium: React.FC<{ apps: any[] }> = ({ apps }) => {
         </div>
       )}
 
-      {/* 1st Place */}
       {sorted[0] && (
         <div className="flex flex-col items-center gap-2 animate-slideIn" style={{ animationDelay: '0ms' }}>
           <div className="w-16 h-16 rounded-2xl bg-white shadow-xl p-2 relative z-10">
@@ -98,7 +93,6 @@ const TopAppsPodium: React.FC<{ apps: any[] }> = ({ apps }) => {
         </div>
       )}
 
-      {/* 3rd Place */}
       {sorted[2] && (
         <div className="flex flex-col items-center gap-2 animate-slideInRight" style={{ animationDelay: '200ms' }}>
           <div className="w-12 h-12 rounded-2xl bg-white shadow-md p-2 relative">
@@ -136,14 +130,12 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
   const [viewMode, setViewMode] = useState<'DAILY' | 'WEEKLY'>('DAILY');
 
   useEffect(() => {
-    // Trigger animation after mount
     const timer = setTimeout(() => setIsAnimating(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="flex flex-col h-full bg-transparent step-enter">
-      {/* Dynamic Header */}
       <div className="px-8 pt-20 pb-8 flex items-center justify-between border-b border-[#D7CCC8]/30 sticky top-0 bg-[#FDFBFA]/80 backdrop-blur-md z-20">
         <button 
           onClick={onBack} 
@@ -160,7 +152,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
       </div>
 
       <div className="p-8 space-y-10 overflow-y-auto no-scrollbar pb-32">
-        {/* Total Time Hero */}
         <div className="p-12 bg-[#3E2723] rounded-3xl text-white text-center shadow-2xl relative overflow-hidden border-b-4 border-black/20">
            <p className="text-[10px] font-black text-[#D7CCC8] uppercase tracking-[0.2em] mb-3 relative z-10 opacity-70">Total Exposure</p>
            <h3 className="text-6xl font-black mb-2 relative z-10 tracking-tighter" aria-label={`${Math.floor(child.screenTimeUsed / 60)} hours ${child.screenTimeUsed % 60} minutes`}>
@@ -187,12 +178,9 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            <i className="fa-solid fa-chart-line absolute right-[-20px] bottom-[-20px] text-[120px] text-white/5" aria-hidden="true"></i>
         </div>
 
-        {/* Activity Chart Section */}
         <section className="space-y-4">
            <div className="flex items-center justify-between px-2">
               <h3 className="font-extrabold text-[#3E2723] text-xl tracking-tight">Activity</h3>
-              
-              {/* Day/Week Toggle */}
               <div className="bg-[#D7CCC8]/30 p-1 rounded-xl flex relative">
                  <button 
                    onClick={() => setViewMode('DAILY')}
@@ -216,7 +204,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            </div>
         </section>
 
-        {/* Top Apps Podium */}
         <section className="space-y-4">
            <h3 className="font-extrabold text-[#3E2723] text-xl tracking-tight px-2">Most Used Apps</h3>
            <div className="p-6 bg-white border border-[#D7CCC8]/40 rounded-3xl shadow-sm overflow-hidden relative">
@@ -225,7 +212,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            </div>
         </section>
 
-        {/* Category Breakdown */}
         <section className="grid grid-cols-2 gap-4">
            <div className="p-6 bg-white border border-[#D7CCC8]/40 rounded-3xl shadow-sm flex flex-col items-center justify-center gap-4">
               <CategoryDonut />
@@ -260,10 +246,8 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            </div>
         </section>
 
-        {/* Content Analysis (Bark Style) */}
         <ContentAnalysis />
 
-        {/* Limits & Schedule */}
         <section className="space-y-6" aria-labelledby="limits-heading">
            <div className="flex items-center justify-between px-2">
               <h3 id="limits-heading" className="font-extrabold text-[#3E2723] text-xl tracking-tight">Daily Limits</h3>
@@ -304,7 +288,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            </div>
         </section>
 
-        {/* App Breakdown - Detailed */}
         <section className="space-y-6" aria-labelledby="app-breakdown-heading">
            <div className="flex items-center justify-between px-2">
               <h3 id="app-breakdown-heading" className="font-extrabold text-[#3E2723] text-xl tracking-tight">App Breakdown</h3>
@@ -365,7 +348,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
            </div>
         </section>
 
-        {/* Global Overrides */}
         <section className="space-y-4 px-2" aria-labelledby="overrides-heading">
            <h3 id="overrides-heading" className="font-extrabold text-[#3E2723] text-lg tracking-tight">Parental Overrides</h3>
            <div className="grid grid-cols-1 gap-3">
@@ -392,7 +374,6 @@ const UsageDetailsView: React.FC<Props> = ({ child, onBack }) => {
         </section>
       </div>
 
-      {/* Schedule Editor Modal */}
       {showScheduleEditor && (
         <ScheduleEditor 
           onClose={() => setShowScheduleEditor(false)}

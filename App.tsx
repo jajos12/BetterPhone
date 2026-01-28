@@ -230,7 +230,6 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
 
-      {/* Command Center Overlay */}
       {showCommandCenter && createPortal(
         <div 
           className="absolute inset-0 z-[100] flex items-end justify-center bg-[#3E2723]/80 backdrop-blur-md animate-fadeIn"

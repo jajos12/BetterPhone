@@ -12,7 +12,6 @@ interface Props {
 type Tab = 'PROFILE' | 'LIMITS' | 'CONTENT';
 
 const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelete }) => {
-  // Get the phone-content element for portal rendering
   const portalContainer = document.getElementById('phone-content');
   
   const [activeTab, setActiveTab] = useState<Tab>('PROFILE');
@@ -35,7 +34,6 @@ const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelet
       }}
     >
       <div className="w-full max-w-xs bg-[#FDFBFA] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90%] border border-white/20">
-        {/* Header */}
         <div className="p-4 border-b border-[#D7CCC8]/30 flex items-center justify-between bg-white/50 backdrop-blur-sm shrink-0">
           <h3 className="font-extrabold text-[#3E2723] text-lg">Edit Profile</h3>
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-[#D7CCC8]/20 flex items-center justify-center text-[#3E2723] hover:bg-[#D7CCC8]/40 transition-colors">
@@ -43,7 +41,6 @@ const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelet
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex p-2 gap-2 shrink-0 bg-white/30">
           {(['PROFILE', 'LIMITS', 'CONTENT'] as Tab[]).map((tab) => (
             <button
@@ -60,7 +57,6 @@ const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelet
           ))}
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar">
           
           {activeTab === 'PROFILE' && (
@@ -108,7 +104,7 @@ const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelet
                       Child
                     </button>
                     <button 
-                      onClick={() => setEditedMember({...editedMember, role: 'PARENT'})} // Usually wouldn't allow this, but for demo
+                      onClick={() => setEditedMember({...editedMember, role: 'PARENT'})}
                       className={`flex-1 py-2 rounded-lg text-[10px] font-bold transition-all ${editedMember.role === 'PARENT' ? 'bg-[#3E2723] text-white shadow-sm' : 'text-[#8D6E63]'}`}
                     >
                       Teen
@@ -248,7 +244,6 @@ const MemberSettingsModal: React.FC<Props> = ({ member, onClose, onSave, onDelet
 
         </div>
 
-        {/* Footer Actions */}
         <div className="p-4 border-t border-[#D7CCC8]/30 bg-white space-y-2 shrink-0">
           <button 
             onClick={handleSave}

@@ -14,7 +14,6 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
 
   const handlePay = () => {
     setIsProcessing(true);
-    // Simulate premium processing delay
     setTimeout(() => {
       setIsProcessing(false);
       setIsDone(true);
@@ -27,7 +26,6 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
   if (isDone) {
     return (
       <div className="h-full bg-transparent flex flex-col items-center justify-center p-8 text-center step-enter relative overflow-hidden">
-        {/* Background Decoration */}
         <div className="absolute inset-0 pointer-events-none">
            <div className="absolute top-1/4 left-10 w-6 h-6 bg-emerald-400/20 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
            <div className="absolute top-1/3 right-12 w-4 h-4 bg-amber-400/20 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
@@ -72,7 +70,6 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
       </div>
 
       <div className="flex-1 overflow-y-auto p-8 space-y-8 no-scrollbar">
-        {/* Plan Toggle */}
         <div className="flex bg-[#D7CCC8]/30 p-1.5 rounded-2xl relative">
            <div 
              className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-xl shadow-sm transition-all duration-300 ease-out ${planType === 'MONTHLY' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
@@ -91,7 +88,6 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
            </button>
         </div>
 
-        {/* Feature List */}
         <div className="space-y-3">
            {[
              'Unlimited Location History',
@@ -124,8 +120,6 @@ const CheckoutView: React.FC<Props> = ({ onCancel, onSuccess }) => {
 
         <div className="space-y-4">
           <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest px-2">Payment Method</p>
-          
-          {/* CSS Credit Card */}
           <div className="w-full aspect-[1.586] bg-gradient-to-br from-[#2C2C2C] to-[#1A1A1A] rounded-2xl p-6 shadow-xl relative overflow-hidden text-white flex flex-col justify-between group cursor-pointer border border-white/10 hover:scale-[1.02] transition-transform">
              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
              <div className="flex justify-between items-start relative z-10">

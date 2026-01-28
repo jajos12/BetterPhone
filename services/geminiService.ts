@@ -1,6 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Always initialize with direct access to process.env.API_KEY as per guidelines
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getFamilyAdvice = async (prompt: string) => {
@@ -14,7 +13,6 @@ export const getFamilyAdvice = async (prompt: string) => {
         temperature: 0.7,
       }
     });
-    // Correctly accessing text as a property
     return response.text || "I'm having trouble connecting to the family network right now. Try again shortly!";
   } catch (error) {
     console.error("AI Error:", error);
@@ -26,7 +24,7 @@ export const getSafetyReview = async (activityLog: string) => {
   const ai = getAI();
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview", // Use pro for complex reasoning tasks like safety expert analysis
+      model: "gemini-3-pro-preview",
       contents: `Analyze this activity log for safety concerns: ${activityLog}`,
       config: {
         systemInstruction: "You are a child safety expert. Review digital activity and flag potential risks (cyberbullying, inappropriate content, etc.) while respecting privacy. Output a concise summary for parents.",
@@ -43,7 +41,6 @@ export const getSafetyReview = async (activityLog: string) => {
         }
       }
     });
-    // Trim text property before parsing JSON
     const text = response.text?.trim();
     return text ? JSON.parse(text) : null;
   } catch (error) {

@@ -143,12 +143,51 @@ const App: React.FC = () => {
     switch (currentSection) {
       case AppSection.SPLASH:
         return (
-          <div className="flex flex-col items-center justify-center h-full bg-[#FDFBFA]">
-            <div className="w-24 h-24 bg-[#3E2723] rounded-[2.8rem] flex items-center justify-center shadow-[0_20px_50px_rgba(62,39,35,0.3)] mb-8 animate-bounce">
-              <i className="fa-solid fa-feather-pointed text-white text-4xl"></i>
+          <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-[#0052FF] via-[#0066FF] to-[#003CCC] relative overflow-hidden">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl -top-40 -right-40 animate-pulse"></div>
+              <div className="absolute w-72 h-72 bg-cyan-300/5 rounded-full blur-3xl -bottom-32 -left-32 animate-pulse" style={{animationDelay: '1s'}}></div>
             </div>
-            <h1 className="text-4xl font-extrabold text-[#3E2723] tracking-tighter">BetterPhone</h1>
-            <p className="mt-3 text-[#8D6E63] font-bold uppercase tracking-[0.2em] text-[10px]">Safe for them • Simple for you</p>
+
+            {/* Status bar indicators (top right) */}
+            <div className="absolute top-6 right-6 z-10 flex items-center gap-1 text-white/70 text-xs font-semibold">
+              <span>📶</span>
+              <span>📡</span>
+              <span className="bg-green-400/80 text-green-900 px-1.5 py-0.5 rounded-full text-[10px] font-bold">100</span>
+            </div>
+
+            {/* Animated colorful stacked logo */}
+            <div className="relative mb-16 animate-pulse">
+              <div className="relative w-24 h-32 flex items-center justify-center">
+                {/* Cyan bar */}
+                <div className="absolute w-20 h-6 bg-cyan-300 rounded-full blur-sm" style={{transform: 'skewY(-8deg) translateY(-8px)', filter: 'drop-shadow(0 8px 16px rgba(34, 211, 238, 0.4))'}}></div>
+                {/* Green bar */}
+                <div className="absolute w-20 h-6 bg-emerald-300 rounded-full blur-sm" style={{transform: 'skewY(-8deg)', filter: 'drop-shadow(0 8px 16px rgba(52, 211, 153, 0.3))'}}></div>
+                {/* Yellow bar */}
+                <div className="absolute w-20 h-6 bg-yellow-300 rounded-full blur-sm" style={{transform: 'skewY(-8deg) translateY(8px)', filter: 'drop-shadow(0 8px 16px rgba(253, 224, 71, 0.3))'}}></div>
+                {/* Pink bar */}
+                <div className="absolute w-20 h-6 bg-pink-400 rounded-full blur-sm" style={{transform: 'skewY(-8deg) translateY(16px)', filter: 'drop-shadow(0 8px 16px rgba(244, 114, 182, 0.4))'}}></div>
+              </div>
+            </div>
+
+            {/* Main text */}
+            <div className="relative z-10 text-center mb-12">
+              <h1 className="text-5xl font-black text-white tracking-tight mb-1">
+                BetterPhone
+              </h1>
+              <p className="text-lg font-medium text-cyan-100">
+                <span className="text-white">Pure</span> <span className="text-cyan-300">Enhance</span>
+              </p>
+            </div>
+
+            {/* Loading bar at bottom */}
+            <div className="absolute bottom-20 w-32 h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-cyan-300 via-emerald-300 to-pink-400 rounded-full" style={{animation: 'fillBar 2.5s ease-out forwards'}}></div>
+            </div>
+
+            {/* Tagline */}
+            <p className="absolute bottom-8 text-white/60 text-xs font-semibold uppercase tracking-widest">Safe for them • Simple for you</p>
           </div>
         );
 

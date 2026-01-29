@@ -54,89 +54,114 @@ const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
     switch (step) {
       case 'WELCOME':
         return (
-          <div className="p-0 flex flex-col items-center text-center h-full justify-between step-enter bg-gradient-to-b from-[#FDFBFA] via-[#FBF8F5] to-[#F5F0ED] overflow-hidden relative">
-            {/* Animated background elements */}
+          <div className="p-0 flex flex-col items-center text-center h-full justify-between step-enter bg-gradient-to-b from-[#0F1B2E] via-[#1a2d4a] to-[#0d1a2e] overflow-hidden relative">
+            {/* Premium background layers */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute w-96 h-96 bg-[#3E2723]/3 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-              <div className="absolute w-80 h-80 bg-[#D7CCC8]/20 rounded-full blur-3xl -bottom-40 -right-32 animate-pulse" style={{animationDelay: '1.5s'}}></div>
+              {/* Glowing orbs */}
+              <div className="absolute w-96 h-96 bg-[#0052FF]/20 rounded-full blur-3xl -top-48 -left-32 animate-pulse"></div>
+              <div className="absolute w-80 h-80 bg-[#A78BFA]/15 rounded-full blur-3xl -bottom-40 right-10 animate-pulse" style={{animationDelay: '2s'}}></div>
+              <div className="absolute w-72 h-72 bg-[#06B6D4]/10 rounded-full blur-3xl top-1/2 left-1/3 animate-pulse" style={{animationDelay: '1s'}}></div>
+              
+              {/* Grid overlay */}
+              <div className="absolute inset-0 opacity-5" style={{backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0, 82, 255, 0.05) 25%, rgba(0, 82, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 82, 255, 0.05) 75%, rgba(0, 82, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 82, 255, 0.05) 25%, rgba(0, 82, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 82, 255, 0.05) 75%, rgba(0, 82, 255, 0.05) 76%, transparent 77%, transparent)', backgroundSize: '50px 50px'}}></div>
             </div>
 
             {/* Content Container */}
-            <div className="relative z-10 flex flex-col items-center text-center h-full justify-between w-full pt-12 pb-12 px-8">
+            <div className="relative z-10 flex flex-col items-center text-center h-full justify-between w-full pt-8 pb-12 px-6">
               
               {/* Top Section - Icon & Headlines */}
-              <div className="mt-2 flex flex-col items-center max-w-lg">
-                {/* Animated Icon Badge */}
-                <div className="relative mb-12">
-                  <div className="absolute inset-0 bg-[#3E2723] rounded-[2.5rem] blur-xl opacity-20 animate-pulse"></div>
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#3E2723] to-[#5D4037] rounded-[2.5rem] flex items-center justify-center shadow-2xl border-4 border-white/40 backdrop-blur-md">
-                    <i className="fa-solid fa-feather-pointed text-5xl text-white drop-shadow-lg"></i>
+              <div className="mt-0 flex flex-col items-center max-w-lg">
+                {/* Animated Premium Icon Badge */}
+                <div className="relative mb-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0052FF] to-[#A78BFA] rounded-[2.5rem] blur-2xl opacity-40 animate-pulse"></div>
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#0066FF] via-[#0052FF] to-[#003CCC] rounded-[2.5rem] flex items-center justify-center shadow-2xl border-4 border-cyan-300/40 backdrop-blur-xl">
+                    <i className="fa-solid fa-feather-pointed text-5xl text-white drop-shadow-2xl"></i>
                   </div>
                 </div>
 
-                {/* Primary Headline */}
-                <h2 className="text-5xl md:text-6xl font-black text-[#3E2723] mb-4 leading-tight tracking-tighter text-balance">
-                  Better for kids.<br /><span className="bg-gradient-to-r from-[#3E2723] to-[#6D4C41] bg-clip-text text-transparent">Best for parents.</span>
+                {/* Premium Headline */}
+                <h2 className="text-5xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tighter text-balance">
+                  Better for kids.<br /><span className="bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-400 bg-clip-text text-transparent">Best for parents.</span>
                 </h2>
 
                 {/* Descriptive Copy */}
-                <p className="text-[16px] text-[#6D4C41] leading-relaxed font-medium max-w-sm mx-auto">
+                <p className="text-[15px] text-blue-100/70 leading-relaxed font-medium max-w-sm mx-auto">
                   Safety and simplicity in one. Give your child the freedom they want with the protection you deserve.
                 </p>
               </div>
 
-              {/* Middle Section - Feature Image */}
-              <div className="relative w-full px-4 my-8 flex items-center justify-center">
-                {/* Outer glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/10 to-transparent rounded-[3rem] blur-2xl"></div>
+              {/* Middle Section - Premium Dream Image */}
+              <div className="relative w-full px-4 my-4 flex items-center justify-center">
+                {/* Magical glow container */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0052FF]/20 via-transparent to-transparent rounded-[3rem] blur-2xl"></div>
 
-                {/* Image Container */}
+                {/* Image Container with premium border */}
                 <div className="relative w-full max-w-sm group">
+                  {/* Premium border effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-[3rem] opacity-40 blur-lg group-hover:opacity-60 transition-opacity"></div>
+                  
                   {/* Image */}
-                  <div className="relative overflow-hidden rounded-[3rem] shadow-2xl border-8 border-white/60 backdrop-blur-sm">
+                  <div className="relative overflow-hidden rounded-[3rem] shadow-2xl border-2 border-cyan-300/30 backdrop-blur-md bg-gradient-to-b from-[#0052FF]/10 to-[#003CCC]/10">
                     <img 
-                      src="https://images.unsplash.com/photo-1510154221590-ff63e90a136f?auto=format&fit=crop&q=80&w=500" 
+                      src="/dream-landscape.jpg" 
                       className="w-full h-72 object-cover" 
-                      alt="Parent and child using device safely" 
+                      alt="Surreal premium landscape" 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/20 to-transparent pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F1B2E]/40 via-transparent to-transparent pointer-events-none"></div>
                   </div>
 
-                  {/* Floating Heart Badge */}
-                  <div className="absolute -bottom-6 -right-3 group animate-bounce" style={{animationDelay: '0.5s'}}>
-                    <div className="absolute inset-0 bg-[#3E2723] rounded-2xl blur-xl opacity-40"></div>
-                    <div className="relative w-20 h-20 bg-gradient-to-br from-[#3E2723] to-[#5D4037] rounded-2xl flex items-center justify-center shadow-2xl border-6 border-white backdrop-blur-md">
-                      <i className="fa-solid fa-heart text-3xl text-white drop-shadow-lg"></i>
+                  {/* Floating Premium Badge */}
+                  <div className="absolute -bottom-5 -right-2 animate-bounce" style={{animationDelay: '0.5s'}}>
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-2xl blur-xl opacity-50"></div>
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-400 via-blue-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-2xl border-3 border-white/40 backdrop-blur-md">
+                      <i className="fa-solid fa-wand-magic-sparkles text-3xl text-white drop-shadow-lg"></i>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Section - CTA & Tagline */}
-              <div className="w-full space-y-6 mb-4 px-4 max-w-sm">
-                {/* Primary Button */}
+              {/* Feature Highlights */}
+              <div className="w-full max-w-sm space-y-3 my-6">
+                <div className="flex items-center gap-3 px-4 py-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center flex-shrink-0">
+                    <i className="fa-solid fa-shield text-xs text-white"></i>
+                  </div>
+                  <span className="text-sm text-blue-100 font-medium">Advanced protection</span>
+                </div>
+                <div className="flex items-center gap-3 px-4 py-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                    <i className="fa-solid fa-heart text-xs text-white"></i>
+                  </div>
+                  <span className="text-sm text-blue-100 font-medium">Peace of mind</span>
+                </div>
+              </div>
+
+              {/* Bottom Section - Premium CTA */}
+              <div className="w-full space-y-4 mb-2 px-4 max-w-sm">
+                {/* Primary Button - Premium style */}
                 <button 
                   onClick={handleNext} 
-                  className="w-full py-6 px-8 bg-gradient-to-r from-[#3E2723] to-[#5D4037] text-white rounded-2xl font-bold shadow-2xl transition-all active:scale-[0.98] text-lg hover:shadow-3xl border-2 border-white/20 hover:border-white/40 backdrop-blur-md group"
+                  className="w-full py-6 px-8 bg-gradient-to-r from-[#0052FF] via-[#0066FF] to-[#003CCC] text-white rounded-2xl font-bold shadow-2xl transition-all active:scale-[0.98] text-lg hover:shadow-[0_20px_50px_rgba(0,82,255,0.4)] border-2 border-cyan-300/30 hover:border-cyan-300/60 backdrop-blur-md group relative overflow-hidden"
                 >
-                  <span className="flex items-center justify-center gap-2">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -skew-x-12 group-hover:translate-x-full transition-transform duration-700"></div>
+                  <span className="relative flex items-center justify-center gap-2">
                     Begin Setup
                     <i className="fa-solid fa-arrow-right group-active:translate-x-1 transition-transform"></i>
                   </span>
                 </button>
 
                 {/* Tagline */}
-                <p className="text-[11px] text-[#8D6E63] font-black uppercase tracking-[0.3em] text-center letter-spacing">
+                <p className="text-[11px] text-blue-200/60 font-black uppercase tracking-[0.3em] text-center">
                   Modern Protection. Human Touch.
                 </p>
               </div>
             </div>
 
-            {/* CSS for animations */}
+            {/* CSS for advanced animations */}
             <style>{`
-              @keyframes fillBar {
-                from { width: 0; }
-                to { width: 100%; }
+              @keyframes shimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
               }
             `}</style>
           </div>

@@ -54,37 +54,91 @@ const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
     switch (step) {
       case 'WELCOME':
         return (
-          <div className="p-8 flex flex-col items-center text-center h-full justify-between step-enter bg-transparent pt-20">
-            <div className="mt-4 flex flex-col items-center">
-              <div className="w-20 h-20 bg-[#3E2723] rounded-[2rem] flex items-center justify-center mb-10 shadow-lg">
-                <i className="fa-solid fa-feather-pointed text-4xl text-white"></i>
-              </div>
-              <h2 className="text-4xl font-extrabold text-[#3E2723] mb-4 leading-tight tracking-tight">Better for kids.<br/>Best for parents.</h2>
-              <p className="text-[#8D6E63] leading-relaxed text-[15px] px-4 font-medium max-w-sm">
-                Safety and simplicity in one. Give your child the freedom they want with the protection you deserve.
-              </p>
-            </div>
-            
-            <div className="relative w-full px-2 my-8">
-               <img 
-                 src="https://images.unsplash.com/photo-1510154221590-ff63e90a136f?auto=format&fit=crop&q=80&w=800" 
-                 className="w-full h-64 object-cover rounded-[2.5rem] shadow-xl border-4 border-white relative z-10" 
-                 alt="Parent and child using device safely" 
-               />
-               <div className="absolute -bottom-4 -right-2 w-16 h-16 bg-[#3E2723] rounded-2xl flex items-center justify-center text-white shadow-2xl z-20 border-4 border-[#FDFBFA]">
-                  <i className="fa-solid fa-heart text-2xl"></i>
-               </div>
+          <div className="p-0 flex flex-col items-center text-center h-full justify-between step-enter bg-gradient-to-b from-[#FDFBFA] via-[#FBF8F5] to-[#F5F0ED] overflow-hidden relative">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute w-96 h-96 bg-[#3E2723]/3 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
+              <div className="absolute w-80 h-80 bg-[#D7CCC8]/20 rounded-full blur-3xl -bottom-40 -right-32 animate-pulse" style={{animationDelay: '1.5s'}}></div>
             </div>
 
-            <div className="w-full space-y-4 mb-8 px-2">
-              <button 
-                onClick={handleNext} 
-                className="w-full py-5 bg-[#3E2723] text-white rounded-2xl font-bold shadow-xl transition-all active:scale-[0.98] text-lg hover:bg-[#2D1B19]"
-              >
-                Begin Setup
-              </button>
-              <p className="text-[10px] text-[#8D6E63] font-black uppercase tracking-[0.25em] text-center">Modern Protection. Human Touch.</p>
+            {/* Content Container */}
+            <div className="relative z-10 flex flex-col items-center text-center h-full justify-between w-full pt-12 pb-12 px-8">
+              
+              {/* Top Section - Icon & Headlines */}
+              <div className="mt-2 flex flex-col items-center max-w-lg">
+                {/* Animated Icon Badge */}
+                <div className="relative mb-12">
+                  <div className="absolute inset-0 bg-[#3E2723] rounded-[2.5rem] blur-xl opacity-20 animate-pulse"></div>
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#3E2723] to-[#5D4037] rounded-[2.5rem] flex items-center justify-center shadow-2xl border-4 border-white/40 backdrop-blur-md">
+                    <i className="fa-solid fa-feather-pointed text-5xl text-white drop-shadow-lg"></i>
+                  </div>
+                </div>
+
+                {/* Primary Headline */}
+                <h2 className="text-5xl md:text-6xl font-black text-[#3E2723] mb-4 leading-tight tracking-tighter text-balance">
+                  Better for kids.<br /><span className="bg-gradient-to-r from-[#3E2723] to-[#6D4C41] bg-clip-text text-transparent">Best for parents.</span>
+                </h2>
+
+                {/* Descriptive Copy */}
+                <p className="text-[16px] text-[#6D4C41] leading-relaxed font-medium max-w-sm mx-auto">
+                  Safety and simplicity in one. Give your child the freedom they want with the protection you deserve.
+                </p>
+              </div>
+
+              {/* Middle Section - Feature Image */}
+              <div className="relative w-full px-4 my-8 flex items-center justify-center">
+                {/* Outer glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/10 to-transparent rounded-[3rem] blur-2xl"></div>
+
+                {/* Image Container */}
+                <div className="relative w-full max-w-sm group">
+                  {/* Image */}
+                  <div className="relative overflow-hidden rounded-[3rem] shadow-2xl border-8 border-white/60 backdrop-blur-sm">
+                    <img 
+                      src="https://images.unsplash.com/photo-1510154221590-ff63e90a136f?auto=format&fit=crop&q=80&w=500" 
+                      className="w-full h-72 object-cover" 
+                      alt="Parent and child using device safely" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#3E2723]/20 to-transparent pointer-events-none"></div>
+                  </div>
+
+                  {/* Floating Heart Badge */}
+                  <div className="absolute -bottom-6 -right-3 group animate-bounce" style={{animationDelay: '0.5s'}}>
+                    <div className="absolute inset-0 bg-[#3E2723] rounded-2xl blur-xl opacity-40"></div>
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-[#3E2723] to-[#5D4037] rounded-2xl flex items-center justify-center shadow-2xl border-6 border-white backdrop-blur-md">
+                      <i className="fa-solid fa-heart text-3xl text-white drop-shadow-lg"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Section - CTA & Tagline */}
+              <div className="w-full space-y-6 mb-4 px-4 max-w-sm">
+                {/* Primary Button */}
+                <button 
+                  onClick={handleNext} 
+                  className="w-full py-6 px-8 bg-gradient-to-r from-[#3E2723] to-[#5D4037] text-white rounded-2xl font-bold shadow-2xl transition-all active:scale-[0.98] text-lg hover:shadow-3xl border-2 border-white/20 hover:border-white/40 backdrop-blur-md group"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    Begin Setup
+                    <i className="fa-solid fa-arrow-right group-active:translate-x-1 transition-transform"></i>
+                  </span>
+                </button>
+
+                {/* Tagline */}
+                <p className="text-[11px] text-[#8D6E63] font-black uppercase tracking-[0.3em] text-center letter-spacing">
+                  Modern Protection. Human Touch.
+                </p>
+              </div>
             </div>
+
+            {/* CSS for animations */}
+            <style>{`
+              @keyframes fillBar {
+                from { width: 0; }
+                to { width: 100%; }
+              }
+            `}</style>
           </div>
         );
 

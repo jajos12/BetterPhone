@@ -87,9 +87,9 @@ const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
               </div>
 
               {/* Full Width Image Section with Wavy Fade */}
-              <div className="relative w-full flex-1 flex items-stretch overflow-hidden">
+              <div className="relative w-full flex-1 flex items-stretch overflow-hidden min-h-0">
                 {/* Image Container */}
-                <div className="relative w-full">
+                <div className="relative w-full h-full flex-1">
                   {/* Image with wavy fade effect at top */}
                   <div className="relative w-full h-full overflow-hidden">
                     <img 
@@ -162,48 +162,103 @@ const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
       case 'PROFILE':
         return (
-          <div className="p-8 h-full flex flex-col step-enter bg-transparent pt-20">
-            <button 
-              onClick={handleBack} 
-              aria-label="Go back"
-              className="w-11 h-11 bg-white border border-[#D7CCC8] rounded-xl flex items-center justify-center mb-10 text-[#3E2723] shadow-sm transition-transform active:scale-90"
-            >
-                <i className="fa-solid fa-arrow-left" aria-hidden="true"></i>
-            </button>
-            <h2 className="text-3xl font-extrabold text-[#3E2723] mb-3 px-1 tracking-tight">Who's joining us?</h2>
-            <p className="text-[#8D6E63] mb-12 text-[15px] px-1 font-medium">Create a protected profile. Each child gets a tailored safety protocol.</p>
-            
-            <div className="space-y-10 flex-1">
-              <div className="px-1">
-                <label htmlFor="child-name-input" className="block text-[11px] font-black text-[#8D6E63] uppercase tracking-wider mb-3">Child's Name</label>
-                <input 
-                  id="child-name-input"
-                  type="text" 
-                  value={childName}
-                  onChange={(e) => setChildName(e.target.value)}
-                  placeholder="Enter name" 
-                  className="w-full p-5 rounded-xl bg-white border border-[#D7CCC8] focus:border-[#3E2723] focus:ring-1 focus:ring-[#3E2723] transition-all font-semibold text-[#3E2723] placeholder:text-[#D7CCC8] shadow-sm outline-none text-base"
-                />
-              </div>
-              
-              <div className="p-6 bg-white border border-[#D7CCC8]/40 rounded-2xl flex items-start gap-4 mx-1">
-                <div className="w-10 h-10 bg-[#3E2723]/5 rounded-xl flex items-center justify-center shrink-0 text-[#3E2723]">
-                  <i className="fa-solid fa-user-shield text-lg" aria-hidden="true"></i>
-                </div>
-                <div className="space-y-1">
-                   <p className="text-sm text-[#3E2723] font-bold">Unified Protection</p>
-                   <p className="text-[12px] text-[#8D6E63] leading-relaxed">This profile manages all tech used by this child for consistent rules.</p>
-                </div>
-              </div>
+          <div className="p-0 h-full flex flex-col step-enter bg-gradient-to-b from-[#FAFAFA] via-[#FFFFFF] to-[#F8F8F8] overflow-hidden relative">
+            {/* Subtle background orbs */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute w-96 h-96 bg-[#0052FF]/5 rounded-full blur-3xl -top-48 -left-32 animate-pulse"></div>
+              <div className="absolute w-80 h-80 bg-[#06B6D4]/4 rounded-full blur-3xl -bottom-40 right-12 animate-pulse" style={{animationDelay: '2s'}}></div>
             </div>
 
-            <button 
-              onClick={handleNext} 
-              disabled={!childName}
-              className="w-full py-5 bg-[#3E2723] text-white rounded-2xl font-bold shadow-xl disabled:opacity-40 disabled:cursor-not-allowed mt-8 transition-transform active:scale-[0.98]"
-            >
-              Continue
-            </button>
+            {/* Content */}
+            <div className="relative z-10 flex flex-col h-full w-full pt-6 pb-8 px-6">
+              {/* Back Button */}
+              <button 
+                onClick={handleBack} 
+                aria-label="Go back"
+                className="w-11 h-11 bg-white border border-gray-200 rounded-xl flex items-center justify-center text-gray-900 shadow-sm transition-all active:scale-90 hover:border-gray-300 mb-8"
+              >
+                  <i className="fa-solid fa-arrow-left" aria-hidden="true"></i>
+              </button>
+
+              {/* Header Section */}
+              <div className="flex flex-col items-center text-center mb-10 px-4">
+                {/* Animated icon */}
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0052FF] to-[#06B6D4] rounded-2xl blur-xl opacity-15 animate-pulse"></div>
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-[#0066FF] via-[#0052FF] to-[#003CCC] rounded-2xl flex items-center justify-center shadow-lg border-2 border-blue-200/50">
+                    <i className="fa-solid fa-user-check text-3xl text-white"></i>
+                  </div>
+                </div>
+
+                {/* Headline */}
+                <h2 className="text-4xl font-black text-gray-900 mb-2 leading-tight tracking-tight">Who's joining us?</h2>
+                <p className="text-gray-600 text-[15px] leading-relaxed font-medium max-w-sm">
+                  Create a protected profile. Each child gets a tailored safety protocol.
+                </p>
+              </div>
+
+              {/* Form Section */}
+              <div className="flex-1 flex flex-col gap-8 max-w-md mx-auto w-full">
+                {/* Name Input */}
+                <div className="space-y-3">
+                  <label htmlFor="child-name-input" className="block text-[11px] font-black text-gray-500 uppercase tracking-widest">Child's Name</label>
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#0052FF]/20 to-[#06B6D4]/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+                    <input 
+                      id="child-name-input"
+                      type="text" 
+                      value={childName}
+                      onChange={(e) => setChildName(e.target.value)}
+                      placeholder="e.g., Emma" 
+                      className="relative w-full p-5 rounded-xl bg-white border-2 border-gray-200 focus:border-[#0052FF] focus:ring-0 transition-all font-semibold text-gray-900 placeholder:text-gray-400 shadow-sm outline-none text-base"
+                    />
+                  </div>
+                </div>
+
+                {/* Info Card */}
+                <div className="group relative">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#0052FF]/10 to-[#06B6D4]/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="relative p-6 bg-gradient-to-br from-white to-blue-50/30 border-2 border-gray-100 rounded-2xl flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#0052FF] to-[#06B6D4] rounded-xl flex items-center justify-center shrink-0 text-white shadow-lg">
+                      <i className="fa-solid fa-shield-check text-lg" aria-hidden="true"></i>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm text-gray-900 font-bold">Unified Protection</p>
+                      <p className="text-[13px] text-gray-600 leading-relaxed">This profile manages all tech used by this child for consistent safety rules across all devices.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secondary Info */}
+                <div className="group relative">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="relative p-5 bg-gradient-to-br from-white to-cyan-50/20 border-2 border-gray-100 rounded-2xl flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#06B6D4] to-cyan-500 rounded-lg flex items-center justify-center shrink-0 text-white">
+                      <i className="fa-solid fa-sparkles text-base" aria-hidden="true"></i>
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-xs text-gray-900 font-bold uppercase tracking-wide">Smart Learning</p>
+                      <p className="text-[12px] text-gray-600 leading-snug">BetterPhone adapts to your child's growing needs with AI-powered insights.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div className="space-y-4 mt-8 max-w-md mx-auto w-full">
+                <button 
+                  onClick={handleNext} 
+                  disabled={!childName}
+                  className="w-full py-5 px-8 bg-gradient-to-r from-[#0052FF] to-[#0066FF] text-white rounded-xl font-bold shadow-lg transition-all active:scale-[0.98] text-base hover:shadow-xl border border-blue-400/30 disabled:opacity-40 disabled:cursor-not-allowed group relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -skew-x-12 group-hover:translate-x-full transition-transform duration-700"></div>
+                  <span className="relative flex items-center justify-center gap-2">
+                    Continue
+                    <i className="fa-solid fa-arrow-right group-active:translate-x-1 transition-transform"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         );
 
